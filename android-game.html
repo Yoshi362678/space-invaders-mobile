@@ -134,6 +134,13 @@
         let enemies = [];
         let enemyBullets = [];
         
+        // インベーダー移動制御
+        let invaderDirection = 1; // 1: 右, -1: 左
+        let invaderSpeed = 0.8;
+        let invaderDropDistance = 25;
+        let invaderMoveCounter = 0;
+        let invaderMoveDelay = 30; // フレーム数（移動間隔）
+        
         // 敵の初期化
         function createEnemies() {
             enemies = [];
@@ -225,6 +232,9 @@
                 return bullet.y < canvas.height;
             });
             
+            // インベーダーの移動
+            updateInvaders();
+            
             // 敵の弾丸発射（ランダム）
             if (Math.random() < 0.01 && enemyBullets.length < 3) {
                 const aliveEnemies = enemies.filter(e => e.alive);
@@ -261,6 +271,65 @@
                     restart();
                 }, 100);
             }
+        }
+        
+        // インベーダーの移動処理
+        function updateInvaders() {
+            if (enemies.length === 0) return;
+            
+            const aliveEnemies = enemies.filter(e => e.alive);
+            if (aliveEnemies.length === 0) return;
+            
+            // 移動間隔制御
+            invaderMoveCounter++;
+            
+            // 敵が少なくなるほど速く移動
+            const speedMultiplier = Math.max(0.3, aliveEnemies.length / enemies.length);
+            const currentDelay = Math.floor(invaderMoveDelay * speedMultiplier);
+            
+            if (invaderMoveCounter >= currentDelay) {
+                invaderMoveCounter = 0;
+                
+                // 画面端に到達したかチェック
+                let hitEdge = false;
+                aliveEnemies.forEach(enemy => {
+                    if (invaderDirection === 1 && enemy.x + enemy.width >= canvas.width - 15) {
+                        hitEdge = true;
+                    } else if (invaderDirection === -1 && enemy.x <= 15) {
+                        hitEdge = true;
+                    }
+                });
+                
+                if (hitEdge) {
+                    // 方向転換して下に移動
+                    invaderDirection *= -1;
+                    aliveEnemies.forEach(enemy => {
+                        enemy.y += invaderDropDistance;
+                    });
+                    
+                    // 移動速度を少し上げる
+                    invaderSpeed += 0.1;
+                    if (invaderMoveDelay > 10) {
+                        invaderMoveDelay -= 1;
+                    }
+                } else {
+                    // 横移動
+                    aliveEnemies.forEach(enemy => {
+                        enemy.x += invaderDirection * invaderSpeed * 8; // 8ピクセルずつ移動
+                    });
+                }
+            }
+            
+            // プレイヤーまで到達したかチェック
+            aliveEnemies.forEach(enemy => {
+                if (enemy.y + enemy.height >= player.y - 10) {
+                    gameRunning = false;
+                    setTimeout(() => {
+                        alert('インベーダーがプレイヤーまで到達！ゲームオーバー！');
+                        restart();
+                    }, 100);
+                }
+            });
         }
         
         // 衝突判定
@@ -334,6 +403,13 @@
             bullets = [];
             enemyBullets = [];
             player.x = canvas.width / 2 - 15;
+            
+            // インベーダー移動をリセット
+            invaderDirection = 1;
+            invaderSpeed = 0.8;
+            invaderMoveCounter = 0;
+            invaderMoveDelay = 30;
+            
             document.getElementById('score').textContent = score;
             document.getElementById('lives').textContent = lives;
             createEnemies();
