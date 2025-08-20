@@ -126,7 +126,7 @@
             y: canvas.height - 100,
             width: 30,
             height: 20,
-            speed: 5
+            speed: 7
         };
         
         // 弾丸と敵
@@ -170,6 +170,7 @@
         };
         
         // イベントリスナー
+        // 左ボタン
         document.getElementById('leftBtn').addEventListener('touchstart', (e) => {
             e.preventDefault();
             controls.left = true;
@@ -180,6 +181,17 @@
             controls.left = false;
         });
         
+        document.getElementById('leftBtn').addEventListener('touchcancel', (e) => {
+            e.preventDefault();
+            controls.left = false;
+        });
+        
+        document.getElementById('leftBtn').addEventListener('touchleave', (e) => {
+            e.preventDefault();
+            controls.left = false;
+        });
+        
+        // 右ボタン
         document.getElementById('rightBtn').addEventListener('touchstart', (e) => {
             e.preventDefault();
             controls.right = true;
@@ -190,6 +202,17 @@
             controls.right = false;
         });
         
+        document.getElementById('rightBtn').addEventListener('touchcancel', (e) => {
+            e.preventDefault();
+            controls.right = false;
+        });
+        
+        document.getElementById('rightBtn').addEventListener('touchleave', (e) => {
+            e.preventDefault();
+            controls.right = false;
+        });
+        
+        // 発射ボタン
         document.getElementById('fireBtn').addEventListener('touchstart', (e) => {
             e.preventDefault();
             fire();
