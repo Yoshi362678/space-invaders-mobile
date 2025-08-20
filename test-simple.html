@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Android Test - Simple</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: #000;
+            color: #0f0;
+        }
+        .test-message {
+            background: red;
+            color: white;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .success {
+            background: green;
+        }
+        #gameCanvas {
+            border: 1px solid #0f0;
+            background: #001122;
+        }
+        .controls {
+            margin-top: 20px;
+        }
+        button {
+            padding: 15px 30px;
+            margin: 10px;
+            font-size: 18px;
+            background: #0f0;
+            color: #000;
+            border: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div id="status">JavaScriptテスト中...</div>
+    
+    <canvas id="gameCanvas" width="300" height="200"></canvas>
+    
+    <div class="controls">
+        <button onclick="testFunction()">テストボタン</button>
+        <button onclick="drawTest()">描画テスト</button>
+    </div>
+    
+    <div id="messages"></div>
+
+    <script>
+        // 最初のテスト - これが実行されるかチェック
+        document.getElementById('status').textContent = 'JavaScript動作OK!';
+        document.getElementById('status').className = 'test-message success';
+        
+        function addMessage(text) {
+            const div = document.createElement('div');
+            div.className = 'test-message success';
+            div.textContent = new Date().toLocaleTimeString() + ': ' + text;
+            document.getElementById('messages').appendChild(div);
+        }
+        
+        addMessage('スクリプト開始');
+        
+        function testFunction() {
+            addMessage('ボタンクリック成功');
+        }
+        
+        function drawTest() {
+            try {
+                const canvas = document.getElementById('gameCanvas');
+                const ctx = canvas.getContext('2d');
+                
+                if (!ctx) {
+                    addMessage('Canvas context取得失敗');
+                    return;
+                }
+                
+                // 背景をクリア
+                ctx.fillStyle = '#001122';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                // シンプルな図形を描画
+                ctx.fillStyle = '#0f0';
+                ctx.fillRect(50, 50, 100, 50);
+                
+                ctx.fillStyle = '#ff0';
+                ctx.fillRect(50, 120, 20, 20);
+                ctx.fillRect(130, 120, 20, 20);
+                
+                ctx.fillStyle = '#f00';
+                ctx.fillRect(200, 80, 50, 30);
+                
+                addMessage('Canvas描画成功');
+                
+            } catch (error) {
+                addMessage('描画エラー: ' + error.message);
+            }
+        }
+        
+        // DOM読み込み完了時のテスト
+        document.addEventListener('DOMContentLoaded', function() {
+            addMessage('DOMContentLoaded実行');
+        });
+        
+        // ページ読み込み完了時のテスト
+        window.addEventListener('load', function() {
+            addMessage('window.load実行');
+        });
+        
+        // タッチテスト
+        document.addEventListener('touchstart', function(e) {
+            addMessage('タッチ開始: ' + e.touches.length + '箇所');
+        });
+        
+        document.addEventListener('touchend', function() {
+            addMessage('タッチ終了');
+        });
+        
+        addMessage('スクリプト設定完了');
+    </script>
+</body>
+</html>

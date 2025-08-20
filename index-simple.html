@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>スペースインベーダー - Mobile</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        body {
+            background: linear-gradient(to bottom, #000014, #000033);
+            font-family: 'Courier New', monospace;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .game-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        
+        canvas {
+            flex: 1;
+            width: 100%;
+            background: linear-gradient(to bottom, #000014, #001122);
+            touch-action: none;
+        }
+        
+        .ui {
+            background: rgba(0, 0, 0, 0.8);
+            color: #00ff88;
+            padding: 10px;
+            text-shadow: 0 0 10px #00ff88;
+            display: flex;
+            justify-content: space-between;
+            font-size: 16px;
+            border-bottom: 1px solid #00ff88;
+        }
+        
+        .controls {
+            background: rgba(0, 0, 0, 0.9);
+            height: 120px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            border-top: 1px solid #00ff88;
+        }
+        
+        .move-controls {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .control-btn {
+            width: 60px;
+            height: 60px;
+            border: 2px solid #00ff88;
+            background: rgba(0, 255, 136, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #00ff88;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.1s;
+            touch-action: manipulation;
+        }
+        
+        .control-btn:active {
+            background: rgba(0, 255, 136, 0.5);
+            transform: scale(0.95);
+            box-shadow: 0 0 20px #00ff88;
+        }
+        
+        .fire-btn {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 68, 68, 0.3);
+            border: 3px solid #ff4444;
+            border-radius: 50%;
+            color: #ff4444;
+            font-size: 18px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.1s;
+            touch-action: manipulation;
+        }
+        
+        .fire-btn:active {
+            background: rgba(255, 68, 68, 0.7);
+            transform: scale(0.95);
+            box-shadow: 0 0 25px #ff4444;
+        }
+
+        .debug-message {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background: rgba(255, 0, 0, 0.9);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 3px;
+            z-index: 9999;
+            font-family: monospace;
+            font-size: 12px;
+            max-width: 250px;
+            word-wrap: break-word;
+        }
+        
+        .success {
+            background: rgba(0, 255, 0, 0.9) !important;
+            color: black !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="ui">
+            <div>スコア: <span id="score">0</span></div>
+            <div>Lv: <span id="level">1</span></div>
+            <div>ライフ: <span id="lives">3</span></div>
+        </div>
+        
+        <canvas id="gameCanvas"></canvas>
+        
+        <div class="controls">
+            <div class="move-controls">
+                <div class="control-btn" id="leftBtn">◀</div>
+                <div class="control-btn" id="rightBtn">▶</div>
+            </div>
+            <div class="fire-btn" id="fireBtn">FIRE</div>
+        </div>
+    </div>
+
+    <script>
+        // デバッグメッセージ表示
+        function debug(message, isSuccess = false) {
+            console.log('DEBUG:', message);
+            
+            const div = document.createElement('div');
+            div.className = 'debug-message' + (isSuccess ? ' success' : '');
+            div.textContent = new Date().toLocaleTimeString() + ': ' + message;
+            document.body.appendChild(div);
+            
+            // 古いメッセージを削除
+            setTimeout(() => {
+                if (div.parentNode) div.parentNode.removeChild(div);
+            }, 5000);
+        }
+        
+        debug('スクリプト開始');
+        
+        // グローバル変数
+        let canvas, ctx;
+        let gameRunning = true;
+        let player, bullets = [], invaders = [], particles = [];
+        let score = 0, lives = 3, level = 1;
+        let touchControls = { left: false, right: false };
+        
+        // 簡単な初期化
+        function init() {
+            try {
+                debug('初期化開始');
+                
+                // Canvas取得
+                canvas = document.getElementById('gameCanvas');
+                if (!canvas) {
+                    debug('Canvas要素が見つかりません');
+                    return false;
+                }
+                
+                ctx = canvas.getContext('2d');
+                if (!ctx) {
+                    debug('Context取得失敗');
+                    return false;
+                }
+                
+                debug('Canvas取得成功', true);
+                
+                // サイズ設定
+                resizeCanvas();
+                
+                // プレイヤー初期化
+                player = {
+                    x: canvas.width / 2 - 25,
+                    y: canvas.height - 60,
+                    width: 50,
+                    height: 30,
+                    speed: 3
+                };
+                
+                // インベーダー初期化
+                initInvaders();
+                
+                // タッチイベント設定
+                setupControls();
+                
+                debug('初期化完了', true);
+                
+                // ゲーム開始
+                gameLoop();
+                
+                return true;
+                
+            } catch (error) {
+                debug('初期化エラー: ' + error.message);
+                return false;
+            }
+        }
+        
+        function resizeCanvas() {
+            const container = document.querySelector('.game-container');
+            const ui = document.querySelector('.ui');
+            const controls = document.querySelector('.controls');
+            
+            if (!container || !ui || !controls) return;
+            
+            const availableHeight = window.innerHeight - ui.offsetHeight - controls.offsetHeight;
+            const availableWidth = window.innerWidth;
+            
+            canvas.width = availableWidth;
+            canvas.height = availableHeight;
+            
+            debug('Canvas サイズ: ' + canvas.width + 'x' + canvas.height);
+        }
+        
+        function initInvaders() {
+            invaders = [];
+            const cols = Math.floor(canvas.width / 60);
+            const rows = 4;
+            
+            for (let row = 0; row < rows; row++) {
+                for (let col = 0; col < cols; col++) {
+                    invaders.push({
+                        x: col * (canvas.width / cols) + 20,
+                        y: row * 40 + 50,
+                        width: 30,
+                        height: 20,
+                        alive: true
+                    });
+                }
+            }
+            
+            debug('インベーダー ' + invaders.length + '体作成');
+        }
+        
+        function setupControls() {
+            const leftBtn = document.getElementById('leftBtn');
+            const rightBtn = document.getElementById('rightBtn');
+            const fireBtn = document.getElementById('fireBtn');
+            
+            if (!leftBtn || !rightBtn || !fireBtn) {
+                debug('ボタン要素が見つかりません');
+                return;
+            }
+            
+            // タッチイベント
+            leftBtn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                touchControls.left = true;
+                debug('左ボタン押下');
+            });
+            leftBtn.addEventListener('touchend', () => touchControls.left = false);
+            
+            rightBtn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                touchControls.right = true;
+                debug('右ボタン押下');
+            });
+            rightBtn.addEventListener('touchend', () => touchControls.right = false);
+            
+            fireBtn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                if (bullets.length < 3) {
+                    bullets.push({
+                        x: player.x + player.width / 2 - 2,
+                        y: player.y,
+                        width: 4,
+                        height: 10,
+                        speed: 5
+                    });
+                    debug('射撃');
+                }
+            });
+            
+            debug('コントロール設定完了', true);
+        }
+        
+        function update() {
+            // プレイヤー移動
+            if (touchControls.left && player.x > 0) {
+                player.x -= player.speed;
+            }
+            if (touchControls.right && player.x < canvas.width - player.width) {
+                player.x += player.speed;
+            }
+            
+            // 弾丸更新
+            bullets = bullets.filter(bullet => {
+                bullet.y -= bullet.speed;
+                return bullet.y > 0;
+            });
+        }
+        
+        function draw() {
+            // 背景クリア
+            ctx.fillStyle = '#001122';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // プレイヤー描画
+            ctx.fillStyle = '#00ff88';
+            ctx.fillRect(player.x, player.y, player.width, player.height);
+            
+            // インベーダー描画
+            ctx.fillStyle = '#ff4444';
+            invaders.forEach(invader => {
+                if (invader.alive) {
+                    ctx.fillRect(invader.x, invader.y, invader.width, invader.height);
+                }
+            });
+            
+            // 弾丸描画
+            ctx.fillStyle = '#ffff00';
+            bullets.forEach(bullet => {
+                ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
+            });
+        }
+        
+        function gameLoop() {
+            if (gameRunning) {
+                update();
+                draw();
+            }
+            requestAnimationFrame(gameLoop);
+        }
+        
+        // 初期化実行
+        debug('DOM読み込み待機中...');
+        
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+        
+        window.addEventListener('load', () => {
+            debug('window.load実行');
+            if (!canvas) init();
+        });
+        
+        window.addEventListener('resize', resizeCanvas);
+        
+        debug('スクリプト設定完了', true);
+    </script>
+</body>
+</html>
