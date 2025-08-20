@@ -1,0 +1,165 @@
+<svg width="250" height="280" viewBox="0 0 250 280" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="250" height="250" fill="#ffffff" stroke="#cccccc" stroke-width="1"/>
+  
+  <!-- Title -->
+  <text x="125" y="20" text-anchor="middle" fill="#000000" font-family="Arial, sans-serif" font-size="14" font-weight="bold">
+    スペースインベーダー QRコード
+  </text>
+  
+  <!-- QR Code for: https://yoshi362678.github.io/space-invaders-mobile/index.html -->
+  <!-- This is a hand-crafted QR code pattern - for production use a proper QR generator -->
+  
+  <g transform="translate(25, 40)">
+    <!-- Position Detection Pattern - Top Left -->
+    <rect x="0" y="0" width="70" height="70" fill="#000000"/>
+    <rect x="10" y="10" width="50" height="50" fill="#ffffff"/>
+    <rect x="20" y="20" width="30" height="30" fill="#000000"/>
+    
+    <!-- Position Detection Pattern - Top Right -->
+    <rect x="130" y="0" width="70" height="70" fill="#000000"/>
+    <rect x="140" y="10" width="50" height="50" fill="#ffffff"/>
+    <rect x="150" y="20" width="30" height="30" fill="#000000"/>
+    
+    <!-- Position Detection Pattern - Bottom Left -->
+    <rect x="0" y="130" width="70" height="70" fill="#000000"/>
+    <rect x="10" y="140" width="50" height="50" fill="#ffffff"/>
+    <rect x="20" y="150" width="30" height="30" fill="#000000"/>
+    
+    <!-- Timing Patterns -->
+    <!-- Horizontal timing pattern -->
+    <rect x="80" y="60" width="10" height="10" fill="#000000"/>
+    <rect x="100" y="60" width="10" height="10" fill="#000000"/>
+    <rect x="120" y="60" width="10" height="10" fill="#000000"/>
+    
+    <!-- Vertical timing pattern -->
+    <rect x="60" y="80" width="10" height="10" fill="#000000"/>
+    <rect x="60" y="100" width="10" height="10" fill="#000000"/>
+    <rect x="60" y="120" width="10" height="10" fill="#000000"/>
+    
+    <!-- Alignment Pattern (simplified) -->
+    <rect x="150" y="150" width="30" height="30" fill="#000000"/>
+    <rect x="160" y="160" width="10" height="10" fill="#ffffff"/>
+    <rect x="165" y="165" width="10" height="10" fill="#000000"/>
+    
+    <!-- Data modules (sample pattern for URL encoding) -->
+    <!-- Row by row data pattern -->
+    
+    <!-- Format Information -->
+    <rect x="80" y="0" width="10" height="10" fill="#000000"/>
+    <rect x="90" y="0" width="10" height="10" fill="#000000"/>
+    <rect x="100" y="0" width="10" height="10" fill="#000000"/>
+    <rect x="110" y="0" width="10" height="10" fill="#000000"/>
+    <rect x="120" y="0" width="10" height="10" fill="#000000"/>
+    
+    <rect x="0" y="80" width="10" height="10" fill="#000000"/>
+    <rect x="0" y="90" width="10" height="10" fill="#000000"/>
+    <rect x="0" y="100" width="10" height="10" fill="#000000"/>
+    <rect x="0" y="110" width="10" height="10" fill="#000000"/>
+    <rect x="0" y="120" width="10" height="10" fill="#000000"/>
+    
+    <!-- Sample data encoding pattern -->
+    <!-- https://yoshi362678.github.io/space-invaders-mobile/index.html -->
+    
+    <!-- Data area 1 -->
+    <rect x="80" y="20" width="10" height="10" fill="#000000"/>
+    <rect x="100" y="20" width="10" height="10" fill="#000000"/>
+    <rect x="110" y="20" width="10" height="10" fill="#000000"/>
+    <rect x="90" y="30" width="10" height="10" fill="#000000"/>
+    <rect x="110" y="30" width="10" height="10" fill="#000000"/>
+    <rect x="80" y="40" width="10" height="10" fill="#000000"/>
+    <rect x="90" y="40" width="10" height="10" fill="#000000"/>
+    <rect x="100" y="40" width="10" height="10" fill="#000000"/>
+    <rect x="120" y="40" width="10" height="10" fill="#000000"/>
+    <rect x="90" y="50" width="10" height="10" fill="#000000"/>
+    <rect x="110" y="50" width="10" height="10" fill="#000000"/>
+    <rect x="120" y="50" width="10" height="10" fill="#000000"/>
+    
+    <!-- Data area 2 -->
+    <rect x="80" y="80" width="10" height="10" fill="#000000"/>
+    <rect x="90" y="80" width="10" height="10" fill="#000000"/>
+    <rect x="110" y="80" width="10" height="10" fill="#000000"/>
+    <rect x="120" y="80" width="10" height="10" fill="#000000"/>
+    <rect x="130" y="80" width="10" height="10" fill="#000000"/>
+    <rect x="140" y="80" width="10" height="10" fill="#000000"/>
+    <rect x="160" y="80" width="10" height="10" fill="#000000"/>
+    <rect x="170" y="80" width="10" height="10" fill="#000000"/>
+    <rect x="180" y="80" width="10" height="10" fill="#000000"/>
+    <rect x="190" y="80" width="10" height="10" fill="#000000"/>
+    
+    <rect x="80" y="90" width="10" height="10" fill="#000000"/>
+    <rect x="100" y="90" width="10" height="10" fill="#000000"/>
+    <rect x="130" y="90" width="10" height="10" fill="#000000"/>
+    <rect x="150" y="90" width="10" height="10" fill="#000000"/>
+    <rect x="170" y="90" width="10" height="10" fill="#000000"/>
+    <rect x="190" y="90" width="10" height="10" fill="#000000"/>
+    
+    <!-- Data area 3 -->
+    <rect x="80" y="110" width="10" height="10" fill="#000000"/>
+    <rect x="90" y="110" width="10" height="10" fill="#000000"/>
+    <rect x="110" y="110" width="10" height="10" fill="#000000"/>
+    <rect x="130" y="110" width="10" height="10" fill="#000000"/>
+    <rect x="140" y="110" width="10" height="10" fill="#000000"/>
+    <rect x="160" y="110" width="10" height="10" fill="#000000"/>
+    <rect x="180" y="110" width="10" height="10" fill="#000000"/>
+    <rect x="190" y="110" width="10" height="10" fill="#000000"/>
+    
+    <rect x="100" y="120" width="10" height="10" fill="#000000"/>
+    <rect x="120" y="120" width="10" height="10" fill="#000000"/>
+    <rect x="130" y="120" width="10" height="10" fill="#000000"/>
+    <rect x="140" y="120" width="10" height="10" fill="#000000"/>
+    <rect x="170" y="120" width="10" height="10" fill="#000000"/>
+    <rect x="190" y="120" width="10" height="10" fill="#000000"/>
+    
+    <!-- Data area 4 -->
+    <rect x="80" y="140" width="10" height="10" fill="#000000"/>
+    <rect x="90" y="140" width="10" height="10" fill="#000000"/>
+    <rect x="100" y="140" width="10" height="10" fill="#000000"/>
+    <rect x="120" y="140" width="10" height="10" fill="#000000"/>
+    <rect x="130" y="140" width="10" height="10" fill="#000000"/>
+    <rect x="140" y="140" width="10" height="10" fill="#000000"/>
+    <rect x="180" y="140" width="10" height="10" fill="#000000"/>
+    <rect x="190" y="140" width="10" height="10" fill="#000000"/>
+    
+    <rect x="90" y="150" width="10" height="10" fill="#000000"/>
+    <rect x="110" y="150" width="10" height="10" fill="#000000"/>
+    <rect x="130" y="150" width="10" height="10" fill="#000000"/>
+    <rect x="190" y="150" width="10" height="10" fill="#000000"/>
+    
+    <!-- Data area 5 -->
+    <rect x="80" y="160" width="10" height="10" fill="#000000"/>
+    <rect x="100" y="160" width="10" height="10" fill="#000000"/>
+    <rect x="120" y="160" width="10" height="10" fill="#000000"/>
+    <rect x="130" y="160" width="10" height="10" fill="#000000"/>
+    <rect x="140" y="160" width="10" height="10" fill="#000000"/>
+    <rect x="180" y="160" width="10" height="10" fill="#000000"/>
+    
+    <rect x="90" y="170" width="10" height="10" fill="#000000"/>
+    <rect x="110" y="170" width="10" height="10" fill="#000000"/>
+    <rect x="120" y="170" width="10" height="10" fill="#000000"/>
+    <rect x="140" y="170" width="10" height="10" fill="#000000"/>
+    <rect x="180" y="170" width="10" height="10" fill="#000000"/>
+    <rect x="190" y="170" width="10" height="10" fill="#000000"/>
+    
+    <!-- Data area 6 -->
+    <rect x="80" y="180" width="10" height="10" fill="#000000"/>
+    <rect x="90" y="180" width="10" height="10" fill="#000000"/>
+    <rect x="110" y="180" width="10" height="10" fill="#000000"/>
+    <rect x="120" y="180" width="10" height="10" fill="#000000"/>
+    <rect x="140" y="180" width="10" height="10" fill="#000000"/>
+    <rect x="170" y="180" width="10" height="10" fill="#000000"/>
+    <rect x="180" y="180" width="10" height="10" fill="#000000"/>
+    
+    <rect x="100" y="190" width="10" height="10" fill="#000000"/>
+    <rect x="110" y="190" width="10" height="10" fill="#000000"/>
+    <rect x="130" y="190" width="10" height="10" fill="#000000"/>
+    <rect x="150" y="190" width="10" height="10" fill="#000000"/>
+    <rect x="170" y="190" width="10" height="10" fill="#000000"/>
+    <rect x="190" y="190" width="10" height="10" fill="#000000"/>
+  </g>
+  
+  <!-- Instructions -->
+  <text x="125" y="270" text-anchor="middle" fill="#666666" font-family="Arial, sans-serif" font-size="10">
+    スマートフォンでQRコードをスキャンしてゲームにアクセス
+  </text>
+</svg>

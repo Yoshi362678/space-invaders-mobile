@@ -1,0 +1,81 @@
+<svg width="192" height="192" viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#000014;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#001122;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="playerGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00ff88;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#44ffaa;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="invaderGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ff4444;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ff8844;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="192" height="192" fill="url(#bgGradient)" rx="20"/>
+  
+  <!-- Stars -->
+  <circle cx="30" cy="25" r="1" fill="#ffffff" opacity="0.8"/>
+  <circle cx="160" cy="35" r="0.8" fill="#ffffff" opacity="0.6"/>
+  <circle cx="180" cy="60" r="1.2" fill="#ffffff" opacity="0.9"/>
+  <circle cx="25" cy="80" r="0.6" fill="#ffffff" opacity="0.5"/>
+  <circle cx="170" cy="120" r="1" fill="#ffffff" opacity="0.7"/>
+  <circle cx="45" cy="150" r="0.8" fill="#ffffff" opacity="0.6"/>
+  <circle cx="165" cy="170" r="1.1" fill="#ffffff" opacity="0.8"/>
+  
+  <!-- Invaders (top row) -->
+  <g transform="translate(40, 40)">
+    <rect x="0" y="0" width="20" height="14" fill="url(#invaderGradient)" rx="2"/>
+    <rect x="2" y="2" width="3" height="3" fill="#ffff00"/>
+    <rect x="15" y="2" width="3" height="3" fill="#ffff00"/>
+  </g>
+  
+  <g transform="translate(96, 40)">
+    <rect x="0" y="0" width="20" height="14" fill="url(#invaderGradient)" rx="2"/>
+    <rect x="2" y="2" width="3" height="3" fill="#ffff00"/>
+    <rect x="15" y="2" width="3" height="3" fill="#ffff00"/>
+  </g>
+  
+  <g transform="translate(132, 40)">
+    <rect x="0" y="0" width="20" height="14" fill="url(#invaderGradient)" rx="2"/>
+    <rect x="2" y="2" width="3" height="3" fill="#ffff00"/>
+    <rect x="15" y="2" width="3" height="3" fill="#ffff00"/>
+  </g>
+  
+  <!-- Invaders (second row) -->
+  <g transform="translate(68, 70)">
+    <rect x="0" y="0" width="20" height="14" fill="#ff8844" rx="2"/>
+    <rect x="2" y="2" width="3" height="3" fill="#ffff00"/>
+    <rect x="15" y="2" width="3" height="3" fill="#ffff00"/>
+  </g>
+  
+  <g transform="translate(104, 70)">
+    <rect x="0" y="0" width="20" height="14" fill="#ff8844" rx="2"/>
+    <rect x="2" y="2" width="3" height="3" fill="#ffff00"/>
+    <rect x="15" y="2" width="3" height="3" fill="#ffff00"/>
+  </g>
+  
+  <!-- Player bullets -->
+  <rect x="58" y="110" width="2" height="8" fill="#ffff00"/>
+  <rect x="78" y="95" width="2" height="8" fill="#ffff00"/>
+  <rect x="118" y="105" width="2" height="8" fill="#ffff00"/>
+  
+  <!-- Enemy bullets -->
+  <rect x="100" y="120" width="2" height="6" fill="#ff44ff"/>
+  <rect x="140" y="100" width="2" height="6" fill="#ff44ff"/>
+  
+  <!-- Player ship -->
+  <g transform="translate(86, 150)">
+    <rect x="0" y="0" width="20" height="12" fill="url(#playerGradient)" rx="2"/>
+    <rect x="6" y="-3" width="8" height="6" fill="#88ffff" rx="1"/>
+    <rect x="2" y="12" width="3" height="2" fill="#ffff00"/>
+    <rect x="15" y="12" width="3" height="2" fill="#ffff00"/>
+  </g>
+  
+  <!-- Title text -->
+  <text x="96" y="35" text-anchor="middle" fill="#00ff88" font-family="monospace" font-size="8" font-weight="bold">SPACE</text>
+  <text x="96" y="185" text-anchor="middle" fill="#00ff88" font-family="monospace" font-size="8" font-weight="bold">INVADERS</text>
+</svg>

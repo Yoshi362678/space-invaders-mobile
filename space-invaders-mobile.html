@@ -4,6 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>3D スペースインベーダー - Mobile</title>
+    
+    <!-- PWA manifest -->
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIjNEIOOCueODmuODvOOCueOCpOODs+ODmeODvOODgOODvCAtIE1vYmlsZSIsCiAgInNob3J0X25hbWUiOiAiU3BhY2UgSW52YWRlcnMiLAogICJkZXNjcmlwdGlvbiI6ICLjg6Ljg5Djgqjjg6vlkJHjgZEzROOCueODmuODvOOCueOCpOODs+ODmeODvOODgOODvOOCsuODvOODoiIsCiAgInN0YXJ0X3VybCI6ICIuLyIsCiAgImRpc3BsYXkiOiAiZnVsbHNjcmVlbiIsCiAgIm9yaWVudGF0aW9uIjogInBvcnRyYWl0IiwKICAidGhlbWVfY29sb3IiOiAiIzAwMDAxNCIsCiAgImJhY2tncm91bmRfY29sb3IiOiAiIzAwMDAxNCIsCiAgImNhdGVnb3JpZXMiOiBbImdhbWVzIiwgImVudGVydGFpbm1lbnQiXSwKICAibGFuZyI6ICJqYSIsCiAgInNjb3BlIjogIi4vIiwKICAiaWNvbnMiOiBbCiAgICB7CiAgICAgICJzcmMiOiAiZGF0YTppbWFnZS9zdmcreG1sO2Jhc2U2NCxQSE4yWnlCM2FXUjBhRDBpTVRreSlJR2hsYVdkb2REMGlNVGs1SWlCMmFXVjNRbTk0UFNJd0lEQWdNVGs1SURBZ01Ua3lJaUI0Yld4dWN6MGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TUM5emRtY2lQZ29nSUNBOFpHVm1jejQ4YkdsdVpXRnlSM0poWkdsbGJuUWdhV1E5SW1KblIzSmhaR2xsYm5RaUlIZ3hQU0l3SlNJZ2VURTlJakF6SWlCNE1qMGlNQ1VpSUhrOVBTSXhNREFsSWo0S0lDQWdJQ0FnUEhOMGIzQWdiMlptYzJWMFBTSXdKU0lnYzNSNWJHVTlJbk4wYjNBdFkyOXNiM0k2SXpBd01EQXhORHB6ZEc5d0xXOXdZV05wZEhrNk1TSWdMejRLSUNBZ0lDQWdQSE4wYjNBZ2IyWm1jMlYwUFNJeE1EQWxJaUJ6ZEhsc1pUMGljM1J2Y0MxamIyeHZjanBzSXpBd01URXlNanB6ZEc5d0xXOXdZV05wZEhrNk1TSWdMejRLSUNBZ1BDOXNhVzVsWVhKSGNtRmthV1Z1ZEQ0S0lDQWdQR3hwYm1WaGNrZHlZV1JwWlc1MElHbGtQU0p3YkdGNVpYSkhjbUZrYVdWdWRDSWdlREU5SWpBbElpQjVNVDBpTUNVaUlIZ3lQU0l4TURBbElpQjVNajBpTVRBd0pTSTRLQ0FnSUNBZ1BITjBiM0FnYjJabWMyVjBQU0l3SlNJZ2MzUjViR1U5SW5OMGIzQXRZMjlzYjNJNkl6QXdabVk0T0RwemRHOXdMVzl3WVdOcGRIazZNU0lnTHo0S0lDQWdJQ0FnUEhOMGIzQWdiMlptYzJWMFBTSXhNREFsSWlCemRIbHNaVDBpYzNSdmNDMWpiMnh2Y2pwc0l6UTBZV1puY201amMyOXdMVzl3WVdOcGRIazZNU0lnTHo0S0lDQWdQQzlzYVc1bFlYSkhjbUZrYVdWdWRENEtJQ0FnUEdScGJtVnlSM0poWkdsbGJuUWdhV1E5SW1sdWRtRmtaWEpIY21Ga2FXVnVkQ0lnZURFOUlqQWxJaUI1TVQwaU1DVWlJSGd5UFNJeE1EQWxJaUI1TWowaU1UQXdKU0k0Q2lBZ0lDQWdQSE4wYjNBZ2IyWm1jMlYwUFNJd0pTSWdjM1I1YkdVOUluTjBiM0F0WTI5c2IzSTZJell3TkRRME5UdHpkRzl3TFc5d1lXTnBkSGs2TVNJZ0x6NEtJQ0FnSUNBZ1BITjBiM0FnYjJabWMyVjBQU0l4TURBbElpQnpkSGxzWlQwaWMzUnZjQzFqYjJ4dmNqcHNJelE2WkdZME5EdDBNenB6ZEc5d0xXOXdZV05wZEhrNk1TSWdMejRLSUNBZ1BDOWthVzVsY2tkeVlXUnBaVzUwUGdvOEwzTjJaMDQ4SWk0dUxnPT0iLAogICAgICAic2l6ZXMiOiAiMTkyeDE5MiIsCiAgICAgICJ0eXBlIjogImltYWdlL3N2Zyt4bWwiCiAgICB9LAogICAgewogICAgICAic3JjIjogImRhdGE6aW1hZ2Uvc3ZnK3htbDtiYXNlNjQsUEhOMlp5QjNhV1IwYUQwaU5URXlJaUJvWldsbmFIUTlJalV4TWlJZ2RtbGxkMEp2ZUQwaU1DQXdJRFV4TWlBMU1USWlJSGh0Ykc1elBTSm9kSFJ3T2k4dmQzZDNMbmN6TG05eVp5OHlNREF3TDNOMlp5SStDbUFnSUNBZ0lEeGtaV1p6UGdvOGJHbHVaV0Z5UjNKaFpHbGxiblFnYVdROUltSm5SM0poWkdsbGJuUWlJSGd4UFNJd0pTSWdlVEU5SWpBbElpQjRNajBpTUNVaUlIa3lQU0l4TURBbElqNEtQSE4wYjNBZ2IyWm1jMlYwUFNJd0pTSWdjM1I1YkdVOUluTjBiM0F0WTI5c2IzSTZJekF3TURBeE5EcHpkRzl3TFc5d1lXTnBkSGs2TVNJZ0x6NEtQSE4wYjNBZ2IyWm1jMlYwUFNJeE1EQWxJaUJ6ZEhsc1pUMGljM1J2Y0MxamIyeHZjam9zSXpBd01URXlNanB6ZEc5d0xXOXdZV05wZEhrNk1TSWdMejRLUEhOMGIzQWdiMlptYzJWMFBTSXdKU0lnYzNSNWJHVTlJbk4wYjNBdFkyOXNiM0k2SXpBd1ptWTRPRHB6ZEc5d0xXOXdZV05wZEhrNk1TSWdMejRLUEhOMGIzQWdiMlptYzJWMFBTSXhNREFsSWlCemRIbHNaVDBpYzNSdmNDMWpiMnh2Y2pwc0l6UTBabVkwT0ZwemRHOXdMVzl3WVdOcGRIazZNU0lnTHo0S1BDOXNhVzVsWVhKSGNtRmthV1Z1ZEQ0S1BHeHBibVZoY2tkeVlXUnBaVzUwSUdsa1BTSndiR0Y1WlhKSGNtRmthV1Z1ZENJZ2VERTlJakFsSWlCNU1UMGlNQ1VpSUhneVBTSXhNREFsSWlCNU1qMGlNVEF3SlNJK0NtRWdQSE4wYjNBZ2IyWm1jMlYwUFNJd0pTSWdjM1I1YkdVOUluTjBiM0F0WTI5c2IzSTZJakF3Wm1ZNE9EcHpkRzl3TFc5d1lXTnBkSGs2TVNJZ0x6NEtQSE4wYjNBZ2IyWm1jMlYwUFNJeE1EQWxJaUJ6ZEhsc1pUMGljM1J2Y0MxamIyeHZjam9tSXpRMFptWmhZVHB6ZEc5d0xXOXdZV05wZEhrNk1TSWdMejRLUEM5c2FXNWxZWEpIY21Ga2FXVnVkRDRLUEdacGJIUmxjaUJwWkQwaVoyeHZkeUkrQ2k4K1BDOXpkbWMrSWlBdUxnPT0iLAogICAgICAic2l6ZXMiOiAiNTEyeDUxMiIsCiAgICAgICJ0eXBlIjogImltYWdlL3N2Zyt4bWwiCiAgICB9CiAgXQp9">
+    
+    <!-- iOS Safari icons -->
+    <link rel="apple-touch-icon" sizes="192x192" href="data:image/svg+xml,%3Csvg width='192' height='192' viewBox='0 0 192 192' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='192' height='192' fill='%23000014' rx='20'/%3E%3Crect x='40' y='40' width='20' height='14' fill='%23ff4444' rx='2'/%3E%3Crect x='42' y='42' width='3' height='3' fill='%23ffff00'/%3E%3Crect x='55' y='42' width='3' height='3' fill='%23ffff00'/%3E%3Crect x='96' y='40' width='20' height='14' fill='%23ff4444' rx='2'/%3E%3Crect x='98' y='42' width='3' height='3' fill='%23ffff00'/%3E%3Crect x='111' y='42' width='3' height='3' fill='%23ffff00'/%3E%3Crect x='132' y='40' width='20' height='14' fill='%23ff4444' rx='2'/%3E%3Crect x='134' y='42' width='3' height='3' fill='%23ffff00'/%3E%3Crect x='147' y='42' width='3' height='3' fill='%23ffff00'/%3E%3Crect x='86' y='150' width='20' height='12' fill='%2300ff88' rx='2'/%3E%3Crect x='92' y='147' width='8' height='6' fill='%2388ffff' rx='1'/%3E%3Crect x='88' y='162' width='3' height='2' fill='%23ffff00'/%3E%3Crect x='101' y='162' width='3' height='2' fill='%23ffff00'/%3E%3Ctext x='96' y='35' text-anchor='middle' fill='%2300ff88' font-family='monospace' font-size='8'%3ESPACE INVADERS%3C/text%3E%3C/svg%3E">
+    <link rel="apple-touch-icon" sizes="512x512" href="data:image/svg+xml,%3Csvg width='512' height='512' viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='512' height='512' fill='%23000014' rx='50'/%3E%3Crect x='120' y='120' width='50' height='35' fill='%23ff4444' rx='5'/%3E%3Crect x='128' y='128' width='8' height='8' fill='%23ffff00'/%3E%3Crect x='154' y='128' width='8' height='8' fill='%23ffff00'/%3E%3Crect x='200' y='120' width='50' height='35' fill='%23ff4444' rx='5'/%3E%3Crect x='208' y='128' width='8' height='8' fill='%23ffff00'/%3E%3Crect x='234' y='128' width='8' height='8' fill='%23ffff00'/%3E%3Crect x='280' y='120' width='50' height='35' fill='%23ff4444' rx='5'/%3E%3Crect x='288' y='128' width='8' height='8' fill='%23ffff00'/%3E%3Crect x='314' y='128' width='8' height='8' fill='%23ffff00'/%3E%3Crect x='360' y='120' width='50' height='35' fill='%23ff4444' rx='5'/%3E%3Crect x='368' y='128' width='8' height='8' fill='%23ffff00'/%3E%3Crect x='394' y='128' width='8' height='8' fill='%23ffff00'/%3E%3Crect x='231' y='380' width='50' height='30' fill='%2300ff88' rx='5'/%3E%3Crect x='246' y='372' width='20' height='15' fill='%2388ffff' rx='3'/%3E%3Crect x='239' y='410' width='8' height='6' fill='%23ffff00'/%3E%3Crect x='265' y='410' width='8' height='6' fill='%23ffff00'/%3E%3Ctext x='256' y='90' text-anchor='middle' fill='%2300ff88' font-family='monospace' font-size='24'%3ESPACE INVADERS%3C/text%3E%3C/svg%3E">
+    
+    <!-- Standard favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg width='192' height='192' viewBox='0 0 192 192' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='192' height='192' fill='%23000014' rx='20'/%3E%3Crect x='40' y='40' width='20' height='14' fill='%23ff4444' rx='2'/%3E%3Crect x='42' y='42' width='3' height='3' fill='%23ffff00'/%3E%3Crect x='55' y='42' width='3' height='3' fill='%23ffff00'/%3E%3Crect x='96' y='40' width='20' height='14' fill='%23ff4444' rx='2'/%3E%3Crect x='98' y='42' width='3' height='3' fill='%23ffff00'/%3E%3Crect x='111' y='42' width='3' height='3' fill='%23ffff00'/%3E%3Crect x='132' y='40' width='20' height='14' fill='%23ff4444' rx='2'/%3E%3Crect x='134' y='42' width='3' height='3' fill='%23ffff00'/%3E%3Crect x='147' y='42' width='3' height='3' fill='%23ffff00'/%3E%3Crect x='86' y='150' width='20' height='12' fill='%2300ff88' rx='2'/%3E%3Crect x='92' y='147' width='8' height='6' fill='%2388ffff' rx='1'/%3E%3Crect x='88' y='162' width='3' height='2' fill='%23ffff00'/%3E%3Crect x='101' y='162' width='3' height='2' fill='%23ffff00'/%3E%3Ctext x='96' y='35' text-anchor='middle' fill='%2300ff88' font-family='monospace' font-size='8'%3ESPACE INVADERS%3C/text%3E%3C/svg%3E">
+    
+    <!-- Theme color for mobile browsers -->
+    <meta name="theme-color" content="#000014">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Space Invaders">
     <style>
         * {
             margin: 0;
@@ -251,13 +267,49 @@
     </div>
 
     <script>
+        // DOM要素の確実な読み込みを待つ
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeGame();
+        });
+        
+        // キャンバス要素とコンテキスト
+        let canvas, ctx, starsCanvas, starsCtx;
+        
+        function initializeGame() {
+            // DOM要素の取得
+            canvas = document.getElementById('gameCanvas');
+            starsCanvas = document.getElementById('starsCanvas');
+            
+            if (!canvas || !starsCanvas) {
+                console.error('Canvas elements not found');
+                setTimeout(initializeGame, 100);
+                return;
+            }
+            
+            // コンテキストの取得
+            ctx = canvas.getContext('2d');
+            starsCtx = starsCanvas.getContext('2d');
+            
+            if (!ctx || !starsCtx) {
+                console.error('Canvas context not available');
+                return;
+            }
+            
+            // 初期化
+            resizeCanvas();
+            setupEventListeners();
+            startGame();
+        }
+        
         // キャンバスのサイズ調整
         function resizeCanvas() {
-            const canvas = document.getElementById('gameCanvas');
-            const starsCanvas = document.getElementById('starsCanvas');
+            if (!canvas || !starsCanvas) return;
+            
             const container = document.querySelector('.game-container');
             const ui = document.querySelector('.ui');
             const controls = document.querySelector('.controls');
+            
+            if (!container || !ui || !controls) return;
             
             const availableHeight = window.innerHeight - ui.offsetHeight - controls.offsetHeight;
             const availableWidth = window.innerWidth;
@@ -275,17 +327,21 @@
             }
         }
         
-        window.addEventListener('resize', resizeCanvas);
-        window.addEventListener('orientationchange', () => {
-            setTimeout(resizeCanvas, 100);
-        });
-        
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
-        const starsCanvas = document.getElementById('starsCanvas');
-        const starsCtx = starsCanvas.getContext('2d');
-        
-        resizeCanvas();
+        function setupEventListeners() {
+            window.addEventListener('resize', resizeCanvas);
+            window.addEventListener('orientationchange', () => {
+                setTimeout(resizeCanvas, 300);
+            });
+            
+            // Android対応のタッチイベント
+            document.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+            }, { passive: false });
+            
+            document.addEventListener('touchmove', function(e) {
+                e.preventDefault();
+            }, { passive: false });
+        }
         
         // ゲーム状態
         let score = 0;
@@ -294,14 +350,8 @@
         let gameRunning = true;
         let isPaused = false;
         
-        // プレイヤー
-        const player = {
-            x: canvas.width / 2 - 25,
-            y: canvas.height - 60,
-            width: 50,
-            height: 30,
-            speed: 4
-        };
+        // プレイヤー（初期化は後で行う）
+        let player;
         
         // 弾丸
         let bullets = [];
@@ -377,25 +427,37 @@
             });
         }
         
-        addTouchEvents(leftBtn, 'left');
-        addTouchEvents(rightBtn, 'right');
-        
-        // 射撃ボタンの特別処理
-        let lastFireTime = 0;
-        fireBtn.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            const now = Date.now();
-            if (now - lastFireTime > 200 && bullets.length < 3) { // 連射制限
-                bullets.push({
-                    x: player.x + player.width / 2 - 2,
-                    y: player.y,
-                    width: 4,
-                    height: 15,
-                    speed: 8
-                });
-                lastFireTime = now;
+        // タッチイベントの初期化（startGame関数内で実行）
+        function initTouchEvents() {
+            const leftBtn = document.getElementById('leftBtn');
+            const rightBtn = document.getElementById('rightBtn');
+            const fireBtn = document.getElementById('fireBtn');
+            
+            if (!leftBtn || !rightBtn || !fireBtn) {
+                console.error('Touch control elements not found');
+                return;
             }
-        });
+            
+            addTouchEvents(leftBtn, 'left');
+            addTouchEvents(rightBtn, 'right');
+            
+            // 射撃ボタンの特別処理
+            let lastFireTime = 0;
+            fireBtn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                const now = Date.now();
+                if (now - lastFireTime > 200 && bullets.length < 3) { // 連射制限
+                    bullets.push({
+                        x: player.x + player.width / 2 - 2,
+                        y: player.y,
+                        width: 4,
+                        height: 15,
+                        speed: 8
+                    });
+                    lastFireTime = now;
+                }
+            });
+        }
         
         // キーボード操作（デバッグ用）
         const keys = {};
@@ -767,9 +829,24 @@
             requestAnimationFrame(gameLoop);
         }
         
-        // ゲーム開始
-        initInvaders();
-        gameLoop();
+        // ゲーム開始関数
+        function startGame() {
+            // プレイヤーの初期化
+            player = {
+                x: canvas.width / 2 - 25,
+                y: canvas.height - 60,
+                width: 50,
+                height: 30,
+                speed: 4
+            };
+            
+            // タッチイベントの初期化
+            initTouchEvents();
+            
+            initInvaders();
+            animateStars();
+            gameLoop();
+        }
     </script>
 </body>
 </html>
