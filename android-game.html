@@ -49,7 +49,7 @@
         
         #controls {
             position: absolute;
-            bottom: 20px;
+            bottom: 80px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
@@ -129,7 +129,7 @@
         // プレイヤー
         const player = {
             x: canvas.width / 2 - 15,
-            y: canvas.height - 170,
+            y: canvas.height - 220,
             width: 30,
             height: 20,
             speed: 7
@@ -432,7 +432,7 @@
             bullets = [];
             enemyBullets = [];
             player.x = canvas.width / 2 - 15;
-            player.y = canvas.height - 170;
+            player.y = canvas.height - 220;
             
             // インベーダー移動をリセット
             invaderDirection = 1;
