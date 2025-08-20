@@ -1,8 +1,8 @@
 {
-  "name": "3D スペースインベーダー - Mobile",
+  "name": "スペースインベーダー - Mobile",
   "short_name": "Space Invaders",
-  "description": "モバイル向け3Dスペースインベーダーゲーム",
-  "start_url": "./space-invaders-mobile.html",
+  "description": "Android最適化スペースインベーダーゲーム",
+  "start_url": "./android-game.html",
   "display": "fullscreen",
   "orientation": "portrait",
   "theme_color": "#000014",
