@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>3D スペースインベーダー - Mobile</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        body {
+            background: linear-gradient(to bottom, #000014, #000033);
+            font-family: 'Courier New', monospace;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .game-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        
+        canvas {
+            flex: 1;
+            width: 100%;
+            background: linear-gradient(to bottom, #000014, #001122);
+            touch-action: none;
+        }
+        
+        .ui {
+            background: rgba(0, 0, 0, 0.8);
+            color: #00ff88;
+            padding: 10px;
+            text-shadow: 0 0 10px #00ff88;
+            display: flex;
+            justify-content: space-between;
+            font-size: 16px;
+            border-bottom: 1px solid #00ff88;
+        }
+        
+        .controls {
+            background: rgba(0, 0, 0, 0.9);
+            height: 120px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            border-top: 1px solid #00ff88;
+        }
+        
+        .move-controls {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .control-btn {
+            width: 60px;
+            height: 60px;
+            border: 2px solid #00ff88;
+            background: rgba(0, 255, 136, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #00ff88;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.1s;
+            touch-action: manipulation;
+        }
+        
+        .control-btn:active {
+            background: rgba(0, 255, 136, 0.5);
+            transform: scale(0.95);
+            box-shadow: 0 0 20px #00ff88;
+        }
+        
+        .fire-btn {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 68, 68, 0.3);
+            border: 3px solid #ff4444;
+            border-radius: 50%;
+            color: #ff4444;
+            font-size: 18px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.1s;
+            touch-action: manipulation;
+        }
+        
+        .fire-btn:active {
+            background: rgba(255, 68, 68, 0.7);
+            transform: scale(0.95);
+            box-shadow: 0 0 25px #ff4444;
+        }
+        
+        .game-over, .victory {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.95);
+            padding: 20px;
+            border-radius: 15px;
+            border: 2px solid;
+            text-align: center;
+            z-index: 1000;
+            max-width: 90%;
+        }
+        
+        .game-over {
+            color: #ff4444;
+            border-color: #ff4444;
+            text-shadow: 0 0 10px #ff4444;
+            display: none;
+        }
+        
+        .victory {
+            color: #44ff44;
+            border-color: #44ff44;
+            text-shadow: 0 0 10px #44ff44;
+            display: none;
+        }
+        
+        .replay-btn {
+            background: linear-gradient(45deg, #00ff88, #44ffaa);
+            color: #000;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 10px 5px;
+            transition: all 0.3s;
+            touch-action: manipulation;
+        }
+        
+        .replay-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .stars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .pause-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid #fff;
+            border-radius: 5px;
+            color: #fff;
+            font-size: 12px;
+            cursor: pointer;
+            z-index: 100;
+            touch-action: manipulation;
+        }
+        
+        .fullscreen-btn {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid #fff;
+            border-radius: 5px;
+            color: #fff;
+            font-size: 10px;
+            cursor: pointer;
+            z-index: 100;
+            touch-action: manipulation;
+        }
+        
+        @media (orientation: landscape) {
+            .controls {
+                height: 80px;
+            }
+            .control-btn {
+                width: 50px;
+                height: 50px;
+            }
+            .fire-btn {
+                width: 60px;
+                height: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas class="stars" id="starsCanvas"></canvas>
+    
+    <div class="game-container">
+        <button class="fullscreen-btn" onclick="toggleFullscreen()">⛶</button>
+        <button class="pause-btn" onclick="togglePause()">⏸</button>
+        
+        <div class="ui">
+            <div>スコア: <span id="score">0</span></div>
+            <div>Lv: <span id="level">1</span></div>
+            <div>ライフ: <span id="lives">3</span></div>
+        </div>
+        
+        <canvas id="gameCanvas"></canvas>
+        
+        <div class="controls">
+            <div class="move-controls">
+                <div class="control-btn" id="leftBtn">◀</div>
+                <div class="control-btn" id="rightBtn">▶</div>
+            </div>
+            <div class="fire-btn" id="fireBtn">FIRE</div>
+        </div>
+        
+        <div class="game-over" id="gameOver">
+            <div style="font-size: 20px;">ゲームオーバー！</div>
+            <div style="font-size: 14px; margin: 10px 0;">最終スコア: <span id="finalScore">0</span></div>
+            <button class="replay-btn" onclick="restartGame()">もう一度プレイ</button>
+        </div>
+        
+        <div class="victory" id="victory">
+            <div style="font-size: 20px;">ステージクリア！</div>
+            <div style="font-size: 14px; margin: 10px 0;">スコア: <span id="stageScore">0</span></div>
+            <button class="replay-btn" onclick="nextLevel()">次のレベル</button>
+            <button class="replay-btn" onclick="restartGame()">最初から</button>
+        </div>
+    </div>
+
+    <script>
+        // キャンバスのサイズ調整
+        function resizeCanvas() {
+            const canvas = document.getElementById('gameCanvas');
+            const starsCanvas = document.getElementById('starsCanvas');
+            const container = document.querySelector('.game-container');
+            const ui = document.querySelector('.ui');
+            const controls = document.querySelector('.controls');
+            
+            const availableHeight = window.innerHeight - ui.offsetHeight - controls.offsetHeight;
+            const availableWidth = window.innerWidth;
+            
+            canvas.width = availableWidth;
+            canvas.height = availableHeight;
+            
+            starsCanvas.width = window.innerWidth;
+            starsCanvas.height = window.innerHeight;
+            
+            // プレイヤーの初期位置を調整
+            if (typeof player !== 'undefined') {
+                player.x = canvas.width / 2 - 25;
+                player.y = canvas.height - 60;
+            }
+        }
+        
+        window.addEventListener('resize', resizeCanvas);
+        window.addEventListener('orientationchange', () => {
+            setTimeout(resizeCanvas, 100);
+        });
+        
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const starsCanvas = document.getElementById('starsCanvas');
+        const starsCtx = starsCanvas.getContext('2d');
+        
+        resizeCanvas();
+        
+        // ゲーム状態
+        let score = 0;
+        let lives = 3;
+        let level = 1;
+        let gameRunning = true;
+        let isPaused = false;
+        
+        // プレイヤー
+        const player = {
+            x: canvas.width / 2 - 25,
+            y: canvas.height - 60,
+            width: 50,
+            height: 30,
+            speed: 4
+        };
+        
+        // 弾丸
+        let bullets = [];
+        let enemyBullets = [];
+        
+        // インベーダー
+        let invaders = [];
+        let invaderDirection = 1;
+        let invaderSpeed = 1;
+        
+        // パーティクル効果
+        let particles = [];
+        
+        // 星空の初期化
+        const stars = [];
+        for (let i = 0; i < 150; i++) {
+            stars.push({
+                x: Math.random() * window.innerWidth,
+                y: Math.random() * window.innerHeight,
+                size: Math.random() * 2,
+                speed: Math.random() * 0.5 + 0.1
+            });
+        }
+        
+        // 星空アニメーション
+        function animateStars() {
+            starsCtx.clearRect(0, 0, starsCanvas.width, starsCanvas.height);
+            starsCtx.fillStyle = '#ffffff';
+            
+            stars.forEach(star => {
+                star.y += star.speed;
+                if (star.y > starsCanvas.height) {
+                    star.y = 0;
+                    star.x = Math.random() * starsCanvas.width;
+                }
+                
+                starsCtx.beginPath();
+                starsCtx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+                starsCtx.fill();
+            });
+            
+            requestAnimationFrame(animateStars);
+        }
+        animateStars();
+        
+        // タッチ操作
+        let touchControls = {
+            left: false,
+            right: false,
+            fire: false
+        };
+        
+        // コントロールボタンのイベント
+        const leftBtn = document.getElementById('leftBtn');
+        const rightBtn = document.getElementById('rightBtn');
+        const fireBtn = document.getElementById('fireBtn');
+        
+        // タッチイベント
+        function addTouchEvents(element, action) {
+            element.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                touchControls[action] = true;
+            });
+            
+            element.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                touchControls[action] = false;
+            });
+            
+            element.addEventListener('touchcancel', (e) => {
+                e.preventDefault();
+                touchControls[action] = false;
+            });
+        }
+        
+        addTouchEvents(leftBtn, 'left');
+        addTouchEvents(rightBtn, 'right');
+        
+        // 射撃ボタンの特別処理
+        let lastFireTime = 0;
+        fireBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            const now = Date.now();
+            if (now - lastFireTime > 200 && bullets.length < 3) { // 連射制限
+                bullets.push({
+                    x: player.x + player.width / 2 - 2,
+                    y: player.y,
+                    width: 4,
+                    height: 15,
+                    speed: 8
+                });
+                lastFireTime = now;
+            }
+        });
+        
+        // キーボード操作（デバッグ用）
+        const keys = {};
+        document.addEventListener('keydown', (e) => {
+            keys[e.code] = true;
+        });
+        document.addEventListener('keyup', (e) => {
+            keys[e.code] = false;
+        });
+        
+        // フルスクリーン機能
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    console.log('フルスクリーンに失敗:', err);
+                });
+            } else {
+                document.exitFullscreen();
+            }
+        }
+        
+        // ポーズ機能
+        function togglePause() {
+            isPaused = !isPaused;
+            document.querySelector('.pause-btn').textContent = isPaused ? '▶' : '⏸';
+        }
+        
+        // 3D風の描画ヘルパー関数
+        function draw3DRect(x, y, width, height, color, depth = 3) {
+            ctx.fillStyle = color;
+            ctx.fillRect(x, y, width, height);
+            
+            ctx.fillStyle = darkenColor(color, 0.3);
+            ctx.beginPath();
+            ctx.moveTo(x + width, y);
+            ctx.lineTo(x + width + depth, y - depth);
+            ctx.lineTo(x + width + depth, y + height - depth);
+            ctx.lineTo(x + width, y + height);
+            ctx.fill();
+            
+            ctx.fillStyle = lightenColor(color, 0.2);
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            ctx.lineTo(x + depth, y - depth);
+            ctx.lineTo(x + width + depth, y - depth);
+            ctx.lineTo(x + width, y);
+            ctx.fill();
+        }
+        
+        function darkenColor(color, factor) {
+            const hex = color.replace('#', '');
+            const r = Math.max(0, Math.floor(parseInt(hex.substr(0, 2), 16) * (1 - factor)));
+            const g = Math.max(0, Math.floor(parseInt(hex.substr(2, 2), 16) * (1 - factor)));
+            const b = Math.max(0, Math.floor(parseInt(hex.substr(4, 2), 16) * (1 - factor)));
+            return `rgb(${r}, ${g}, ${b})`;
+        }
+        
+        function lightenColor(color, factor) {
+            const hex = color.replace('#', '');
+            const r = Math.min(255, Math.floor(parseInt(hex.substr(0, 2), 16) * (1 + factor)));
+            const g = Math.min(255, Math.floor(parseInt(hex.substr(2, 2), 16) * (1 + factor)));
+            const b = Math.min(255, Math.floor(parseInt(hex.substr(4, 2), 16) * (1 + factor)));
+            return `rgb(${r}, ${g}, ${b})`;
+        }
+        
+        // パーティクル作成
+        function createParticles(x, y, color, count = 8) {
+            for (let i = 0; i < count; i++) {
+                particles.push({
+                    x: x,
+                    y: y,
+                    vx: (Math.random() - 0.5) * 6,
+                    vy: (Math.random() - 0.5) * 6,
+                    life: 25,
+                    maxLife: 25,
+                    color: color,
+                    size: Math.random() * 2 + 1
+                });
+            }
+        }
+        
+        // インベーダーを初期化
+        function initInvaders() {
+            invaders = [];
+            const rows = Math.min(4 + Math.floor(level / 2), 6);
+            const cols = Math.min(Math.floor(canvas.width / 60), 10);
+            
+            for (let row = 0; row < rows; row++) {
+                for (let col = 0; col < cols; col++) {
+                    invaders.push({
+                        x: col * (canvas.width / cols) + 20,
+                        y: row * 40 + 50,
+                        width: Math.min(35, canvas.width / cols - 10),
+                        height: 25,
+                        alive: true,
+                        type: row < 2 ? 'fast' : row < 4 ? 'normal' : 'strong'
+                    });
+                }
+            }
+        }
+        
+        // プレイヤーを描画
+        function drawPlayer() {
+            draw3DRect(player.x, player.y, player.width, player.height, '#00ff88', 6);
+            draw3DRect(player.x + 15, player.y - 8, 20, 12, '#88ffff', 3);
+            
+            ctx.fillStyle = '#ffff00';
+            ctx.fillRect(player.x + 8, player.y + player.height, 6, 4);
+            ctx.fillRect(player.x + 36, player.y + player.height, 6, 4);
+        }
+        
+        // インベーダーを描画
+        function drawInvaders() {
+            invaders.forEach(invader => {
+                if (invader.alive) {
+                    let color = '#ff4444';
+                    if (invader.type === 'fast') color = '#ff8844';
+                    if (invader.type === 'strong') color = '#8844ff';
+                    
+                    draw3DRect(invader.x, invader.y, invader.width, invader.height, color, 4);
+                    
+                    ctx.fillStyle = '#ffff00';
+                    const eyeSize = Math.max(2, invader.width / 8);
+                    ctx.fillRect(invader.x + eyeSize, invader.y + eyeSize, eyeSize, eyeSize);
+                    ctx.fillRect(invader.x + invader.width - eyeSize * 2, invader.y + eyeSize, eyeSize, eyeSize);
+                }
+            });
+        }
+        
+        // 弾丸を描画
+        function drawBullets() {
+            bullets.forEach(bullet => {
+                ctx.fillStyle = '#ffff00';
+                ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
+                ctx.fillStyle = '#ffff0044';
+                ctx.fillRect(bullet.x - 1, bullet.y - 3, bullet.width + 2, bullet.height + 6);
+            });
+            
+            enemyBullets.forEach(bullet => {
+                ctx.fillStyle = '#ff44ff';
+                ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
+                ctx.fillStyle = '#ff44ff44';
+                ctx.fillRect(bullet.x - 1, bullet.y - 3, bullet.width + 2, bullet.height + 6);
+            });
+        }
+        
+        // パーティクルを描画
+        function drawParticles() {
+            particles.forEach((particle, index) => {
+                const alpha = particle.life / particle.maxLife;
+                ctx.fillStyle = particle.color + Math.floor(alpha * 255).toString(16).padStart(2, '0');
+                ctx.fillRect(particle.x, particle.y, particle.size, particle.size);
+                
+                particle.x += particle.vx;
+                particle.y += particle.vy;
+                particle.life--;
+                
+                if (particle.life <= 0) {
+                    particles.splice(index, 1);
+                }
+            });
+        }
+        
+        // 衝突判定
+        function checkCollision(rect1, rect2) {
+            return rect1.x < rect2.x + rect2.width &&
+                   rect1.x + rect1.width > rect2.x &&
+                   rect1.y < rect2.y + rect2.height &&
+                   rect1.y + rect1.height > rect2.y;
+        }
+        
+        // プレイヤーの更新
+        function updatePlayer() {
+            if ((touchControls.left || keys['ArrowLeft']) && player.x > 0) {
+                player.x -= player.speed;
+            }
+            if ((touchControls.right || keys['ArrowRight']) && player.x < canvas.width - player.width) {
+                player.x += player.speed;
+            }
+            if (keys['Space'] && bullets.length < 3) {
+                bullets.push({
+                    x: player.x + player.width / 2 - 2,
+                    y: player.y,
+                    width: 4,
+                    height: 15,
+                    speed: 8
+                });
+                keys['Space'] = false;
+            }
+        }
+        
+        // 弾丸の更新
+        function updateBullets() {
+            bullets = bullets.filter(bullet => {
+                bullet.y -= bullet.speed;
+                return bullet.y > 0;
+            });
+            
+            enemyBullets = enemyBullets.filter(bullet => {
+                bullet.y += bullet.speed;
+                return bullet.y < canvas.height;
+            });
+        }
+        
+        // インベーダーの更新
+        function updateInvaders() {
+            let moveDown = false;
+            let currentSpeed = invaderSpeed + level * 0.2;
+            
+            invaders.forEach(invader => {
+                if (invader.alive) {
+                    if ((invader.x <= 0 && invaderDirection === -1) || 
+                        (invader.x >= canvas.width - invader.width && invaderDirection === 1)) {
+                        moveDown = true;
+                    }
+                }
+            });
+            
+            if (moveDown) {
+                invaderDirection *= -1;
+                invaders.forEach(invader => {
+                    if (invader.alive) {
+                        invader.y += 20;
+                    }
+                });
+            }
+            
+            invaders.forEach(invader => {
+                if (invader.alive) {
+                    let speed = currentSpeed;
+                    if (invader.type === 'fast') speed *= 1.5;
+                    invader.x += invaderDirection * speed;
+                }
+            });
+            
+            if (Math.random() < 0.01 + level * 0.003 && enemyBullets.length < 5) {
+                const aliveInvaders = invaders.filter(inv => inv.alive);
+                if (aliveInvaders.length > 0) {
+                    const shooter = aliveInvaders[Math.floor(Math.random() * aliveInvaders.length)];
+                    enemyBullets.push({
+                        x: shooter.x + shooter.width / 2 - 2,
+                        y: shooter.y + shooter.height,
+                        width: 4,
+                        height: 10,
+                        speed: 2 + level * 0.3
+                    });
+                }
+            }
+        }
+        
+        // 衝突判定の処理
+        function handleCollisions() {
+            bullets.forEach((bullet, bulletIndex) => {
+                invaders.forEach((invader) => {
+                    if (invader.alive && checkCollision(bullet, invader)) {
+                        invader.alive = false;
+                        bullets.splice(bulletIndex, 1);
+                        
+                        let points = 10;
+                        if (invader.type === 'fast') points = 20;
+                        if (invader.type === 'strong') points = 30;
+                        
+                        score += points;
+                        document.getElementById('score').textContent = score;
+                        
+                        createParticles(invader.x + invader.width/2, invader.y + invader.height/2, '#ff4444');
+                    }
+                });
+            });
+            
+            enemyBullets.forEach((bullet, bulletIndex) => {
+                if (checkCollision(bullet, player)) {
+                    enemyBullets.splice(bulletIndex, 1);
+                    lives--;
+                    document.getElementById('lives').textContent = lives;
+                    createParticles(player.x + player.width/2, player.y + player.height/2, '#00ff88');
+                    
+                    if (lives <= 0) {
+                        gameRunning = false;
+                        document.getElementById('finalScore').textContent = score;
+                        document.getElementById('gameOver').style.display = 'block';
+                    }
+                }
+            });
+            
+            invaders.forEach(invader => {
+                if (invader.alive && invader.y + invader.height >= player.y) {
+                    gameRunning = false;
+                    document.getElementById('finalScore').textContent = score;
+                    document.getElementById('gameOver').style.display = 'block';
+                }
+            });
+            
+            if (invaders.every(invader => !invader.alive)) {
+                gameRunning = false;
+                document.getElementById('stageScore').textContent = score;
+                document.getElementById('victory').style.display = 'block';
+            }
+        }
+        
+        // ゲームリスタート
+        function restartGame() {
+            score = 0;
+            lives = 3;
+            level = 1;
+            gameRunning = true;
+            isPaused = false;
+            bullets = [];
+            enemyBullets = [];
+            particles = [];
+            invaderSpeed = 1;
+            player.x = canvas.width / 2 - 25;
+            
+            document.getElementById('score').textContent = score;
+            document.getElementById('lives').textContent = lives;
+            document.getElementById('level').textContent = level;
+            document.getElementById('gameOver').style.display = 'none';
+            document.getElementById('victory').style.display = 'none';
+            document.querySelector('.pause-btn').textContent = '⏸';
+            
+            initInvaders();
+        }
+        
+        // 次のレベル
+        function nextLevel() {
+            level++;
+            gameRunning = true;
+            isPaused = false;
+            bullets = [];
+            enemyBullets = [];
+            particles = [];
+            invaderSpeed += 0.3;
+            player.x = canvas.width / 2 - 25;
+            
+            document.getElementById('level').textContent = level;
+            document.getElementById('victory').style.display = 'none';
+            document.querySelector('.pause-btn').textContent = '⏸';
+            
+            initInvaders();
+        }
+        
+        // ゲームループ
+        function gameLoop() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            if (gameRunning && !isPaused) {
+                updatePlayer();
+                updateBullets();
+                updateInvaders();
+                handleCollisions();
+            }
+            
+            drawPlayer();
+            drawInvaders();
+            drawBullets();
+            drawParticles();
+            
+            // ポーズ表示
+            if (isPaused) {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#fff';
+                ctx.font = 'bold 24px Courier New';
+                ctx.textAlign = 'center';
+                ctx.fillText('ポーズ中', canvas.width/2, canvas.height/2);
+                ctx.textAlign = 'left';
+            }
+            
+            requestAnimationFrame(gameLoop);
+        }
+        
+        // ゲーム開始
+        initInvaders();
+        gameLoop();
+    </script>
+</body>
+</html>
