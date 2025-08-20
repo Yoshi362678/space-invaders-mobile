@@ -129,7 +129,7 @@
         // プレイヤー
         const player = {
             x: canvas.width / 2 - 15,
-            y: canvas.height - 100,
+            y: canvas.height - 170,
             width: 30,
             height: 20,
             speed: 7
@@ -432,6 +432,7 @@
             bullets = [];
             enemyBullets = [];
             player.x = canvas.width / 2 - 15;
+            player.y = canvas.height - 170;
             
             // インベーダー移動をリセット
             invaderDirection = 1;
