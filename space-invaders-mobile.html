@@ -267,39 +267,89 @@
     </div>
 
     <script>
-        // DOM要素の確実な読み込みを待つ
-        document.addEventListener('DOMContentLoaded', function() {
-            initializeGame();
-        });
+        // デバッグ用の画面表示機能
+        function showDebugMessage(message) {
+            const debugDiv = document.createElement('div');
+            debugDiv.style.cssText = `
+                position: fixed;
+                top: 10px;
+                left: 10px;
+                background: rgba(255, 0, 0, 0.8);
+                color: white;
+                padding: 10px;
+                border-radius: 5px;
+                z-index: 9999;
+                font-family: monospace;
+                font-size: 12px;
+                max-width: 300px;
+                word-wrap: break-word;
+            `;
+            debugDiv.textContent = message;
+            document.body.appendChild(debugDiv);
+            console.log('DEBUG:', message);
+        }
         
         // キャンバス要素とコンテキスト
         let canvas, ctx, starsCanvas, starsCtx;
         
+        // より簡単な初期化方法
         function initializeGame() {
-            // DOM要素の取得
-            canvas = document.getElementById('gameCanvas');
-            starsCanvas = document.getElementById('starsCanvas');
-            
-            if (!canvas || !starsCanvas) {
-                console.error('Canvas elements not found');
-                setTimeout(initializeGame, 100);
-                return;
+            try {
+                showDebugMessage('初期化開始...');
+                
+                // DOM要素の取得
+                canvas = document.getElementById('gameCanvas');
+                starsCanvas = document.getElementById('starsCanvas');
+                
+                showDebugMessage('Canvas要素: ' + (canvas ? 'OK' : 'NG') + ', Stars: ' + (starsCanvas ? 'OK' : 'NG'));
+                
+                if (!canvas || !starsCanvas) {
+                    showDebugMessage('Canvas要素が見つかりません。再試行中...');
+                    setTimeout(initializeGame, 500);
+                    return;
+                }
+                
+                // コンテキストの取得
+                ctx = canvas.getContext('2d');
+                starsCtx = starsCanvas.getContext('2d');
+                
+                showDebugMessage('Context: ' + (ctx ? 'OK' : 'NG') + ', StarsCtx: ' + (starsCtx ? 'OK' : 'NG'));
+                
+                if (!ctx || !starsCtx) {
+                    showDebugMessage('Canvas contextが取得できません');
+                    return;
+                }
+                
+                showDebugMessage('Canvas初期化成功');
+                
+                // 初期化
+                resizeCanvas();
+                setupEventListeners();
+                startGame();
+                
+                showDebugMessage('ゲーム開始完了');
+                
+            } catch (error) {
+                showDebugMessage('エラー: ' + error.message);
+                console.error('Initialization error:', error);
             }
-            
-            // コンテキストの取得
-            ctx = canvas.getContext('2d');
-            starsCtx = starsCanvas.getContext('2d');
-            
-            if (!ctx || !starsCtx) {
-                console.error('Canvas context not available');
-                return;
-            }
-            
-            // 初期化
-            resizeCanvas();
-            setupEventListeners();
-            startGame();
         }
+        
+        // 複数の方法で初期化を試行
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializeGame);
+        } else {
+            // すでに読み込み完了している場合
+            initializeGame();
+        }
+        
+        // フォールバック: window.onloadでも試行
+        window.addEventListener('load', function() {
+            if (!canvas || !ctx) {
+                showDebugMessage('DOMContentLoadedで失敗、window.onloadで再試行');
+                initializeGame();
+            }
+        });
         
         // キャンバスのサイズ調整
         function resizeCanvas() {
@@ -429,34 +479,44 @@
         
         // タッチイベントの初期化（startGame関数内で実行）
         function initTouchEvents() {
-            const leftBtn = document.getElementById('leftBtn');
-            const rightBtn = document.getElementById('rightBtn');
-            const fireBtn = document.getElementById('fireBtn');
-            
-            if (!leftBtn || !rightBtn || !fireBtn) {
-                console.error('Touch control elements not found');
-                return;
-            }
-            
-            addTouchEvents(leftBtn, 'left');
-            addTouchEvents(rightBtn, 'right');
-            
-            // 射撃ボタンの特別処理
-            let lastFireTime = 0;
-            fireBtn.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                const now = Date.now();
-                if (now - lastFireTime > 200 && bullets.length < 3) { // 連射制限
-                    bullets.push({
-                        x: player.x + player.width / 2 - 2,
-                        y: player.y,
-                        width: 4,
-                        height: 15,
-                        speed: 8
-                    });
-                    lastFireTime = now;
+            try {
+                const leftBtn = document.getElementById('leftBtn');
+                const rightBtn = document.getElementById('rightBtn');
+                const fireBtn = document.getElementById('fireBtn');
+                
+                showDebugMessage('ボタン要素: L=' + (leftBtn ? 'OK' : 'NG') + ' R=' + (rightBtn ? 'OK' : 'NG') + ' F=' + (fireBtn ? 'OK' : 'NG'));
+                
+                if (!leftBtn || !rightBtn || !fireBtn) {
+                    showDebugMessage('タッチコントロール要素が見つかりません');
+                    return;
                 }
-            });
+                
+                addTouchEvents(leftBtn, 'left');
+                addTouchEvents(rightBtn, 'right');
+                
+                // 射撃ボタンの特別処理
+                let lastFireTime = 0;
+                fireBtn.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    const now = Date.now();
+                    if (now - lastFireTime > 200 && bullets.length < 3) { // 連射制限
+                        bullets.push({
+                            x: player.x + player.width / 2 - 2,
+                            y: player.y,
+                            width: 4,
+                            height: 15,
+                            speed: 8
+                        });
+                        lastFireTime = now;
+                    }
+                });
+                
+                showDebugMessage('タッチイベント設定完了');
+                
+            } catch (error) {
+                showDebugMessage('initTouchEventsエラー: ' + error.message);
+                console.error('initTouchEvents error:', error);
+            }
         }
         
         // キーボード操作（デバッグ用）
@@ -831,21 +891,37 @@
         
         // ゲーム開始関数
         function startGame() {
-            // プレイヤーの初期化
-            player = {
-                x: canvas.width / 2 - 25,
-                y: canvas.height - 60,
-                width: 50,
-                height: 30,
-                speed: 4
-            };
-            
-            // タッチイベントの初期化
-            initTouchEvents();
-            
-            initInvaders();
-            animateStars();
-            gameLoop();
+            try {
+                showDebugMessage('startGame開始');
+                
+                // プレイヤーの初期化
+                player = {
+                    x: canvas.width / 2 - 25,
+                    y: canvas.height - 60,
+                    width: 50,
+                    height: 30,
+                    speed: 4
+                };
+                
+                showDebugMessage('プレイヤー初期化完了');
+                
+                // タッチイベントの初期化
+                initTouchEvents();
+                showDebugMessage('タッチイベント初期化完了');
+                
+                initInvaders();
+                showDebugMessage('インベーダー初期化完了');
+                
+                animateStars();
+                showDebugMessage('星空アニメーション開始');
+                
+                gameLoop();
+                showDebugMessage('ゲームループ開始');
+                
+            } catch (error) {
+                showDebugMessage('startGameエラー: ' + error.message);
+                console.error('startGame error:', error);
+            }
         }
     </script>
 </body>
