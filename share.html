@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ゲーム共有</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #000014, #000033);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+        }
+        .url-box {
+            background: #333;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            word-break: break-all;
+            font-family: monospace;
+        }
+        .copy-btn {
+            background: #0f0;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .copy-btn:hover {
+            background: #0a0;
+        }
+        .qr-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 スペースインベーダー</h1>
+        <p>友達とゲームを共有しよう！</p>
+        
+        <h3>📱 ゲームURL</h3>
+        <div class="url-box" id="gameUrl">
+            https://yoshi362678.github.io/space-invaders-mobile/android-game.html
+        </div>
+        
+        <button class="copy-btn" onclick="copyUrl()">URLをコピー</button>
+        <button class="copy-btn" onclick="shareUrl()">LINEで共有</button>
+        
+        <h3>📲 QRコード</h3>
+        <div class="qr-container">
+            <img src="qr-android-game.svg" alt="QRコード" style="width: 150px; height: auto;">
+        </div>
+        
+        <h3>💡 共有方法</h3>
+        <div style="text-align: left; margin: 20px 0;">
+            <p><strong>1. URLをコピー:</strong> 上のボタンでURLをコピーしてLINEに貼り付け</p>
+            <p><strong>2. QRコード:</strong> QRコードをスクリーンショットして送信</p>
+            <p><strong>3. 直接共有:</strong> LINEで共有ボタンを使用</p>
+        </div>
+        
+        <button class="copy-btn" onclick="playGame()" style="background: #f44; color: white;">
+            ゲームを開始
+        </button>
+    </div>
+
+    <script>
+        function copyUrl() {
+            const url = document.getElementById('gameUrl').textContent;
+            navigator.clipboard.writeText(url).then(() => {
+                alert('URLをコピーしました！LINEに貼り付けて送信してください。');
+            }).catch(() => {
+                // フォールバック
+                const textArea = document.createElement('textarea');
+                textArea.value = url;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert('URLをコピーしました！');
+            });
+        }
+        
+        function shareUrl() {
+            const url = 'https://yoshi362678.github.io/space-invaders-mobile/android-game.html';
+            const text = '🚀 スペースインベーダーゲームを一緒にやろう！';
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'スペースインベーダー',
+                    text: text,
+                    url: url
+                });
+            } else {
+                // LINEアプリで開く
+                const lineUrl = `https://line.me/R/msg/text/?${encodeURIComponent(text + ' ' + url)}`;
+                window.open(lineUrl, '_blank');
+            }
+        }
+        
+        function playGame() {
+            window.open('android-game.html', '_blank');
+        }
+    </script>
+</body>
+</html>
